@@ -1,4 +1,4 @@
-class Branded<T> {
+export class Branded<T> {
   private __brand!: T;
 }
 
