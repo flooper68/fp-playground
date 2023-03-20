@@ -138,7 +138,10 @@ export const editDescription = (
   };
 };
 
-export const finishTodo = (note: TodoFinishNote, todo: UnfinishedTodo) => {
+export const finishTodo = (
+  note: TodoFinishNote,
+  todo: UnfinishedTodo
+): FinishedTodo => {
   return {
     uuid: todo.uuid,
     title: todo.title,

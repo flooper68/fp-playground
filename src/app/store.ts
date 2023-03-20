@@ -180,13 +180,10 @@ export function TodoFileStore(context: {
     async set(uuid, todo) {
       const fileContent = await getFileContent();
 
-      return fileContent.match(
-        async (data) => {
-          data.todos.set(uuid, todo);
-          return saveFile(data);
-        },
-        async (e) => Result.Err(e)
-      );
+      return fileContent.chainAsync(async (data) => {
+        data.todos.set(uuid, todo);
+        return saveFile(data);
+      });
     },
     async delete(uuid: string) {
       const fileContent = await getFileContent();

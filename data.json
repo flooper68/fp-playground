@@ -2,7 +2,7 @@
   "todos": {
     "asg": {
       "uuid": "asg",
-      "title": "adg",
+      "title": "",
       "description": "asdg",
       "note": null,
       "done": false
@@ -12,6 +12,13 @@
       "title": "test1",
       "description": "Neco",
       "note": "Wooow...",
+      "done": true
+    },
+    "test": {
+      "uuid": "test",
+      "title": "t1",
+      "description": "t",
+      "note": null,
       "done": true
     }
   }

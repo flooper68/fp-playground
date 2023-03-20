@@ -11,7 +11,7 @@ import {
   TodoDescription,
   TodoFinishNote,
   TodoTitle,
-  TodoUuid
+  TodoUuid,
 } from "./todo-domain";
 
 export enum TodoCommandErrorType {
