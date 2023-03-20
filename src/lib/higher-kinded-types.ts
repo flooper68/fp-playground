@@ -1,21 +1,15 @@
-import { Box } from "./implementations/box";
-import { Either } from "./implementations/either";
 import { Option } from "./implementations/option";
-
-export const BoxTypeTag = "Box";
-
-export type BoxTypeTag = typeof BoxTypeTag;
+import { Result } from "./implementations/result";
 
 export const OptionTypeTag = "Option";
 
 export type OptionTypeTag = typeof OptionTypeTag;
 
-export const EitherTypeTag = "Either";
+export const ResultTypeTag = "Result";
 
-export type EitherTypeTag = typeof EitherTypeTag;
+export type ResultTypeTag = typeof ResultTypeTag;
 
 export interface TypeTagtoKind1<A> {
-  readonly [BoxTypeTag]: Box<A>;
   readonly [OptionTypeTag]: Option<A>;
 }
 
@@ -27,7 +21,7 @@ export type Kind1<
 > = URI extends HigherKindedTypes1 ? TypeTagtoKind1<A>[URI] : never;
 
 export interface TypeTagtoKind2<A, B> {
-  readonly [EitherTypeTag]: Either<A, B>;
+  readonly [ResultTypeTag]: Result<A, B>;
 }
 
 export type HigherKindedTypes2 = keyof TypeTagtoKind2<unknown, unknown>;
