@@ -3,13 +3,7 @@ import { Result } from "../lib/implementations/result";
 import { Opaque } from "../lib/opaque";
 import { DomainErrors } from "./errors";
 import { DomainEventType } from "./events";
-import {
-  EditableScreen,
-  Screen,
-  ScreenActions,
-  ScreenHeight,
-  ScreenUuid,
-} from "./screen";
+import { Screen, ScreenActions, ScreenHeight, ScreenUuid } from "./screen";
 import {
   Segment,
   SegmentActions,
@@ -174,43 +168,6 @@ export const SetupActions = {
       return Result.Ok(setup);
     }
   },
-  updateScreen(
-    props: {
-      uuid: ScreenUuid;
-      handler: (screen: EditableScreen) => Result<DomainErrors, Screen>;
-    },
-    setup: Setup
-  ): Result<DomainErrors, Setup> {
-    const screen = setup.screens.find((s) => s.uuid === props.uuid);
-
-    if (screen == null) {
-      return Result.Err(DomainErrors.ScreenNoFound);
-    }
-
-    const editableScreen = ScreenActions.assertEditableScreen(screen);
-
-    const updatedScreen = editableScreen.chain(
-      (screen): Result<DomainErrors, Screen> => {
-        return props.handler(screen);
-      }
-    );
-
-    const updatedSetup = updatedScreen.chain((updatedScreen) => {
-      return EditableSetup({
-        uuid: setup.uuid,
-        danteEnabled: setup.danteEnabled,
-        screens: setup.screens.map((screen) => {
-          if (screen.uuid === updatedScreen.uuid) {
-            return updatedScreen;
-          }
-
-          return screen;
-        }),
-      });
-    });
-
-    return updatedSetup;
-  },
   createScreen(
     props: { uuid: ScreenUuid; height: ScreenHeight; segments: Segment[] },
     setup: EditableSetup
@@ -272,12 +229,24 @@ export const SetupActions = {
       return Result.Err(DomainErrors.ScreenNoFound);
     }
 
-    return EditableSetup({
-      uuid: setup.uuid,
-      danteEnabled: setup.danteEnabled,
-      screens: setup.screens.filter((screen) => {
-        return screen.uuid !== props.uuid;
-      }),
+    const updatedScreen = ScreenActions.assertEditableScreen(screen).chain(
+      (s) => {
+        return ScreenActions.delete(s);
+      }
+    );
+
+    return updatedScreen.chain((updatedScreen) => {
+      return EditableSetup({
+        uuid: setup.uuid,
+        danteEnabled: setup.danteEnabled,
+        screens: setup.screens.map((screen) => {
+          if (screen.uuid !== props.uuid) {
+            return screen;
+          }
+
+          return updatedScreen;
+        }),
+      });
     });
   },
   addSegmentToScreen(

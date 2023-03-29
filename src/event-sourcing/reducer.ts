@@ -154,14 +154,6 @@ function applySegmentRemoved(
   state: StateWithEvents<Setup, DomainEvent>,
   event: SegmentRemoved
 ): Result<DomainErrors, StateWithEvents<Setup, DomainEvent>> {
-  const screenOfSegment = state.state.screens.find((screen) =>
-    screen.segments.map((s) => s.uuid).includes(event.payload.uuid)
-  );
-
-  if (screenOfSegment == null) {
-    return Result.Err(DomainErrors.SegmentNotFound);
-  }
-
   return SetupActions.assertEditableSetup(state.state)
     .chain((setup) => {
       return SetupActions.removeSegment(

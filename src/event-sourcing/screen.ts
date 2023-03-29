@@ -162,18 +162,6 @@ export const ScreenActions = {
       segments: screen.segments,
     });
   },
-  updateHeight(
-    props: {
-      height: ScreenHeight;
-    },
-    screen: EditableScreen
-  ): Result<DomainErrors, EditableScreen> {
-    return EditableScreen({
-      uuid: screen.uuid,
-      height: props.height,
-      segments: screen.segments,
-    });
-  },
   addSegment(
     props: {
       segment: Segment;

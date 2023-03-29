@@ -10,7 +10,7 @@ export const getHistorySnapshot = (events: DomainEvent[], index: number) => {
     return Result.Err("Can not create snapshot from empty history" as const);
   }
 
-  const snapshot = events.slice(1, index) as EntityDomainEvent[];
+  const restOfEvents = events.slice(1, index) as EntityDomainEvent[];
 
   const firstEvent = events[0] as SetupAdded;
 
@@ -21,11 +21,11 @@ export const getHistorySnapshot = (events: DomainEvent[], index: number) => {
   }).map((setup) => {
     return {
       state: setup,
-      events: [],
+      events: [firstEvent],
     };
   });
 
-  return snapshot
+  return restOfEvents
     .reduce<Result<DomainErrors, StateWithEvents<Setup, DomainEvent>>>(
       (acc, event) => acc.chain((setup) => reduceDomainEvent(setup, event)),
       initialState
