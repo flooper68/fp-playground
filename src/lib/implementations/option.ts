@@ -14,6 +14,14 @@ class Some<V> {
   map<C>(f: (value: V) => C): Option<C> {
     return new Some(f(this._value));
   }
+
+  isSome(): this is Some<V> {
+    return true;
+  }
+
+  isNone(): this is never {
+    return false;
+  }
 }
 
 class None<V> {
@@ -29,6 +37,14 @@ class None<V> {
 
   map<C>(f: (value: V) => C): Option<C> {
     return new None();
+  }
+
+  isSome(): this is never {
+    return false;
+  }
+
+  isNone(): this is None<V> {
+    return true;
   }
 }
 
@@ -46,5 +62,16 @@ export const Option = {
       return new None();
     }
     return new Some(value);
+  },
+  compare(a: Option<unknown>, b: Option<unknown>): boolean {
+    if (a.isNone() && b.isNone()) {
+      return true;
+    }
+
+    if (a.isSome() && b.isSome()) {
+      return a.unwrap() === b.unwrap();
+    }
+
+    return false;
   },
 };
